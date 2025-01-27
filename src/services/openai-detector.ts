@@ -35,7 +35,6 @@ export const detectCategoriesWithAI = async (
       return { icon: icon, label: labelParts.join(' ') };
     });
 
-    console.log(categories)
 
     return transactions.map((transaction, index) => ({
       ...transaction,

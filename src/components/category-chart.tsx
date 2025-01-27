@@ -31,7 +31,13 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ transactions, onCategoryS
     color: category.color,
   }));
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: { payload: { category: Transaction["category"]; color: string }; value: number }[];
+  }) => {
     if (active && payload && payload.length) {
       const { category, color } = payload[0].payload;
       return (
@@ -52,7 +58,7 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ transactions, onCategoryS
   };
 
   const handleLegendClick = useCallback(
-    (entry: any) => {
+    (entry: { payload: { category: Transaction["category"]; color: string } }) => {
       const categoryLabel = entry.payload.category.label;
       onCategorySelect(categoryLabel);
     },
@@ -85,7 +91,7 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ transactions, onCategoryS
                   <Cell
                     key={`cell-${entry.category.label}`}
                     fill={entry.color}
-                    onClick={() => handleLegendClick({ payload: entry })}
+                    onClick={() => handleLegendClick({ payload: { category: entry.category, color: entry.color } })}
                     style={{ outline: "none" }}
                   />
                 ))}
@@ -94,6 +100,7 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ transactions, onCategoryS
               <Legend
                 iconType="circle"
                 iconSize={0}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 formatter={(_value, entry: any) => (
                   <span
                     className={`flex items-center space-x-2 cursor-pointer hover:opacity-75 transition-opacity ${

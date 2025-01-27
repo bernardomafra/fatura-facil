@@ -71,7 +71,7 @@ const categoryRules: CategoryRule[] = [
   {
     label: CategoryLabels.Alimentacao,
     icon: '🍽️',
-    keywords: ['hambur', 'restaurante', 'food', 'pizza', 'lanche', 'burger', 'cafeteria', 'padaria', 'acai', 'sorvete', 'doceria', 'confeitaria', 'bar', 'pub', 'choperia', 'delivery', 'cozinha', 'aconchego da praca', 'Jeronimo', 'madero', 'Arlindo Umbelino', 'Exoticus'],
+    keywords: ['hambur', 'restaurante', 'food', 'pizza', 'lanche', 'burger', 'cafeteria', 'padaria', 'acai', 'sorvete', 'doceria', 'confeitaria', 'bar', 'pub', 'choperia', 'delivery', 'cozinha', 'aconchego da praca', 'Jeronimo', 'madero', 'Arlindo Umbelino', 'Exoticus', 'Godo', 'Gennaro', 'Popeyes', 'Xico da Carne'],
     merchantPatterns: [
       /food/i,
       /burger/i,
@@ -127,7 +127,7 @@ const categoryRules: CategoryRule[] = [
   {
     label: CategoryLabels.Gasolina,
     icon: '⛽️',
-    keywords: ['gasolina', 'posto', 'combustivel', 'gasolina'],
+    keywords: ['gasolina', 'posto', 'combustivel', 'gasolina', 'Cristiano Machado'],
     merchantPatterns: [
       /^posto/i,
       /gasolina/i,
@@ -239,7 +239,7 @@ const categoryRules: CategoryRule[] = [
   {
     label: CategoryLabels.Compras,
     icon: '🛍️',
-    keywords: ['shopping', 'loja', 'store', 'magazine', 'americanas', 'renner', 'riachuelo', 'marisa', 'cea', 'casas bahia', 'ponto frio', 'parcela', 'ml', 'mercadolivre', 'mp', 'mercado livre', 'mercado pago', 'estetica', 'Enxovais', 'boulevard' , 'patio savassi', 'diamond mall', 'bh shop'],
+    keywords: ['shopping', 'loja', 'store', 'magazine', 'americanas', 'renner', 'riachuelo', 'marisa', 'cea', 'casas bahia', 'ponto frio', 'parcela', 'ml', 'mercadolivre', 'mp', 'mercado livre', 'mercado pago', 'estetica', 'Enxovais', 'boulevard' , 'patio savassi', 'diamond mall', 'bh shop', 'Pernambucanas'],
     merchantPatterns: [
       /shop(ping)?/i,
       /store/i,
@@ -346,6 +346,18 @@ const categoryRules: CategoryRule[] = [
     ],
     color: CategoryColors[CategoryLabels.Pet],
   },
+  {
+    label: CategoryLabels.Entretenimento,
+    icon: '🎥',
+    keywords: ['Cinemark', 'cinema', 'filme', 'filmes', 'cinema', 'filme', 'filmes', 'cinema', 'filme', 'filmes'],
+    merchantPatterns: [
+      /cinemark/i,
+      /cinema/i,
+      /filme/i,
+      /filmes/i,
+    ],
+    color: CategoryColors[CategoryLabels.Entretenimento],
+  }
 ];
 
 function calculateScore(rule: CategoryRule, transaction: { name: string; amount: number }): number {
@@ -361,7 +373,6 @@ function calculateScore(rule: CategoryRule, transaction: { name: string; amount:
 
   // Check merchant patterns
   rule.merchantPatterns?.forEach(pattern => {
-    console.log(pattern, normalizedName, { test: pattern.test(normalizedName) });
     if (pattern.test(normalizedName)) {
       score += 4;
     }

@@ -44,7 +44,8 @@ export const parsePDF = async (
         for (const item of transactionItems) {
           const text = item.str.trim();
 
-          if (text.includes("Estorno")) continue;
+          console.log(text);
+          if (["Estorno", "Pagamento em", "Saldo restante"].some(keyword => text.includes(keyword))) continue;
 
           // Match date pattern (DD MMM)
           const dateMatch = text.match(/^(\d{2})\s+([A-Z]{3})$/);
