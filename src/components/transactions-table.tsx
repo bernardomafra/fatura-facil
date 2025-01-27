@@ -1,27 +1,83 @@
 import { Transaction } from "../types/transaction";
+import { useState } from "react";
+
+interface SortConfig {
+  key: keyof Transaction;
+  direction: "asc" | "desc";
+}
 
 export const TransactionsTable = ({ transactions }: { transactions: Transaction[] }) => {
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: "date", direction: "desc" });
+
+  const sortedTransactions = [...transactions].sort((a, b) => {
+    if (sortConfig.key === "category") {
+      const compareResult = a.category.label.localeCompare(b.category.label);
+      return sortConfig.direction === "asc" ? compareResult : -compareResult;
+    }
+
+    if (typeof a[sortConfig.key] === "string") {
+      const compareResult = (a[sortConfig.key] as string).localeCompare(b[sortConfig.key] as string);
+      return sortConfig.direction === "asc" ? compareResult : -compareResult;
+    }
+
+    const aValue = a[sortConfig.key] as number;
+    const bValue = b[sortConfig.key] as number;
+    return sortConfig.direction === "asc" ? aValue - bValue : bValue - aValue;
+  });
+
+  const handleSort = (key: keyof Transaction) => {
+    setSortConfig((currentConfig) => {
+      // If clicking the same column that's already sorted descending, remove sorting
+      if (currentConfig.key === key && currentConfig.direction === "desc") {
+        return { key: "date", direction: "desc" }; // Reset to default sort
+      }
+      // If clicking the same column, toggle direction
+      if (currentConfig.key === key) {
+        return { key, direction: "desc" };
+      }
+      // If clicking a new column, sort ascending
+      return { key, direction: "asc" };
+    });
+  };
+
+  const getSortIcon = (key: keyof Transaction) => {
+    if (sortConfig.key !== key) return "↕️";
+    return sortConfig.direction === "asc" ? "↑" : "↓";
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full table-fixed">
-        <thead className="bg-gray-50 dark:bg-gray-700/50">
+        <thead className="bg-gray-50 dark:bg-gray-700/50 select-none">
           <tr>
-            <th className="w-32 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Data
+            <th
+              onClick={() => handleSort("date")}
+              className="w-32 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600/50"
+            >
+              Data {getSortIcon("date")}
             </th>
-            <th className="w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Categoria
+            <th
+              onClick={() => handleSort("category")}
+              className="w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600/50"
+            >
+              Categoria {getSortIcon("category")}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Descrição
+            <th
+              onClick={() => handleSort("name")}
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600/50"
+            >
+              Descrição {getSortIcon("name")}
             </th>
-            <th className="w-36 px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Valor
+            <th
+              onClick={() => handleSort("amount")}
+              className="w-36 px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600/50"
+            >
+              Valor {getSortIcon("amount")}
             </th>
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
-          {transactions.map((transaction, index) => (
+          {sortedTransactions.map((transaction, index) => (
             <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
               <td className="w-32 px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                 {transaction.date}

@@ -93,7 +93,6 @@ const categoryRules: CategoryRule[] = [
     keywords: ['mercado', 'super', 'sup', 'hiper', 'atacado', 'atacadista', 'hortifruti', 'sacolao', 'feira', 'carrefour', 'pao de acucar', 'extra', 'dia', 'assai', 'sams', 'makro', 'comercio', 'comercio de alimentos', 'supermercado', 'bh', 'epa', 'daki', 'supernosso', 'verdemar', 'panificadora', 'pao', 'paes'],
     merchantPatterns: [
       /^sup(er)?/i,
-      /^merc(ado)?/i,
       /^hiper/i,
       /market/i,
       /comercio/i,

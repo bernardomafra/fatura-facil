@@ -36,3 +36,8 @@ export interface Transaction {
   name: string;
   amount: number;
 }
+
+export interface SortConfig {
+  key: keyof Transaction;
+  direction: 'asc' | 'desc';
+}
