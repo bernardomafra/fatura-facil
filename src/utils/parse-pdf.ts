@@ -1,6 +1,6 @@
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
 import { Transaction } from "../types/transaction";
-import { detectCategoriesWithPreference } from "./icon-detector";
+import { detectCategoriesWithPreference } from "../services/category-detector";
 
 GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 

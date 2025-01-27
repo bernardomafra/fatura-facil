@@ -9,6 +9,7 @@ export enum CategoryLabels {
   Servicos = 'Serviços',
   Tecnologia = 'Tecnologia',
   Viagens = 'Viagens',
+  Hospedagens = 'Hospedagens',
   Moradia = 'Moradia',
   Utilidades = 'Utilidades',
   Streaming = 'Streaming',
@@ -16,6 +17,11 @@ export enum CategoryLabels {
   Farmacia = 'Farmácia',
   Educacao = 'Educação',
   Outros = 'Outros',
+  Gasolina = 'Gasolina',
+  Assinaturas = 'Assinaturas',
+  Bares = 'Bares',
+  Eventos = 'Eventos',
+  Pet = 'Pet',
 }
 
 export interface Category {
