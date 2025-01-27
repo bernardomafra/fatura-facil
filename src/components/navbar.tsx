@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // import ThemeToggle from "./theme-toggle";
 import FileUploader from "./file-uploader";
-
+import logo from "/logo.svg";
 interface NavBarProps {
   onFileUpload: (file: File) => void;
 }
@@ -14,7 +14,10 @@ const NavBar: React.FC<NavBarProps> = ({ onFileUpload }) => {
       <div className="w-full bg-white dark:bg-gray-800 shadow-sm">
         <div className="max-w-[1920px] mx-auto px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">Análise de Fatura</h1>
+            <div className="flex items-center space-x-2">
+              <img src={logo} alt="Fatura Fácil" className="w-10 h-10" />
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white"> Fatura Fácil</h1>
+            </div>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setIsDialogOpen(true)}
