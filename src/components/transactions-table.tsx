@@ -8,6 +8,8 @@ interface SortConfig {
 
 export const TransactionsTable = ({ transactions }: { transactions: Transaction[] }) => {
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: "date", direction: "desc" });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Default number of items per page
 
   const sortedTransactions = [...transactions].sort((a, b) => {
     if (sortConfig.key === "category") {
@@ -45,6 +47,16 @@ export const TransactionsTable = ({ transactions }: { transactions: Transaction[
     return sortConfig.direction === "asc" ? "↑" : "↓";
   };
 
+  // Calculate pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sortedTransactions.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(sortedTransactions.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full table-fixed">
@@ -77,7 +89,7 @@ export const TransactionsTable = ({ transactions }: { transactions: Transaction[
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
-          {sortedTransactions.map((transaction, index) => (
+          {currentItems.map((transaction, index) => (
             <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
               <td className="w-32 px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                 {transaction.date}
@@ -109,6 +121,46 @@ export const TransactionsTable = ({ transactions }: { transactions: Transaction[
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+          Mostrando {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, sortedTransactions.length)} de {sortedTransactions.length}
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            Anterior
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+            <button
+              key={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors
+                         ${currentPage === pageNumber 
+                           ? 'bg-indigo-500 text-white' 
+                           : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                         }`}
+            >
+              {pageNumber}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            Próxima
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
